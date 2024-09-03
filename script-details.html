@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECAX Community | Script Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .details-frame {
+            width: 90%;
+            border: 2px solid red;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: black;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .details-item {
+            margin-bottom: 10px;
+        }
+        button {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid red;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="details-frame">
+        <h1>Script Details</h1>
+        <div class="details-item">
+            <strong>Title:</strong> <span id="scriptTitle"></span>
+        </div>
+        <div class="details-item">
+            <strong>Owner:</strong> <span id="scriptOwner"></span>
+        </div>
+        <div class="details-item">
+            <strong>Type:</strong> <span id="scriptType"></span>
+        </div>
+        <div class="details-item" id="gameNameDetail" style="display: none;">
+            <strong>Game Name:</strong> <span id="scriptGameName"></span>
+        </div>
+        <div class="details-item">
+            <strong>Script:</strong>
+            <pre id="scriptContent"></pre>
+        </div>
+        <button onclick="copyScript()">Copy Script</button>
+    </div>
+
+    <script>
+        // Retrieve script details from local storage
+        document.getElementById('scriptTitle').textContent = localStorage.getItem('title');
+        document.getElementById('scriptOwner').textContent = localStorage.getItem('owner');
+        document.getElementById('scriptType').textContent = localStorage.getItem('type');
+        document.getElementById('scriptContent').textContent = localStorage.getItem('script');
+
+        if (localStorage.getItem('type') === "game") {
+            document.getElementById('gameNameDetail').style.display = "block";
+            document.getElementById('scriptGameName').textContent = localStorage.getItem('gameName');
+        }
+
+        function copyScript() {
+            var scriptContent = document.getElementById('scriptContent').textContent;
+            navigator.clipboard.writeText(scriptContent).then(function() {
+                alert('Script copied to clipboard!');
+            }).catch(function(err) {
+                alert('Failed to copy script: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECAX Community | Scripts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .title-frame {
+            width: 90%;
+            border: 2px solid red;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: black;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .upload-frame {
+            width: 90%;
+            border: 2px solid red;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: black;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        input[type="text"], select {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid red;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid red;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        #gameNameInput {
+            display: none;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .script-list-frame {
+            width: 90%;
+            border: 2px solid red;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: black;
+            height: calc(100vh - 250px);
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .script-item {
+            padding: 10px;
+            border: 1px solid red;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+        }
+        .script-item:hover {
+            background-color: #333;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid red;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-frame">
+        <h1>ECAX Community | Scripts</h1>
+        <input type="text" id="searchInput" placeholder="Search scripts..." oninput="searchScripts()">
+    </div>
+
+    <div class="upload-frame">
+        <input type="text" id="titleInput" placeholder="Title">
+        <input type="text" id="ownerInput" placeholder="Script Owner">
+        <input type="text" id="scriptInput" placeholder="Script Here">
+        <select id="scriptTypePicker" onchange="toggleGameNameInput()">
+            <option value="none">Select Script Type</option>
+            <option value="universal">Universal</option>
+            <option value="game">Game Script</option>
+        </select>
+        <input type="text" id="gameNameInput" placeholder="Game Name" style="display:none;">
+        <button type="button" onclick="uploadScript()">Upload</button>
+    </div>
+
+    <div class="script-list-frame" id="scriptList">
+        <!-- Script items will be dynamically inserted here -->
+    </div>
+
+    <script>
+        function toggleGameNameInput() {
+            var scriptTypePicker = document.getElementById('scriptTypePicker');
+            var gameNameInput = document.getElementById('gameNameInput');
+
+            if (scriptTypePicker.value === "game") {
+                gameNameInput.style.display = "block";
+            } else {
+                gameNameInput.style.display = "none";
+            }
+        }
+
+        function uploadScript() {
+            var titleInput = document.getElementById('titleInput').value;
+            var ownerInput = document.getElementById('ownerInput').value;
+            var scriptInput = document.getElementById('scriptInput').value;
+            var scriptTypePicker = document.getElementById('scriptTypePicker').value;
+            var gameNameInput = document.getElementById('gameNameInput').value;
+
+            if (!titleInput || !ownerInput || !scriptInput || scriptTypePicker === "none") {
+                alert('Please provide all required fields.');
+                return;
+            }
+
+            // Create a new script button and add it to the list
+            var scriptList = document.getElementById('scriptList');
+            var scriptItem = document.createElement('div');
+            scriptItem.className = 'script-item';
+            scriptItem.textContent = titleInput;
+            scriptItem.onclick = function() {
+                // Store script details in local storage
+                localStorage.setItem('title', titleInput);
+                localStorage.setItem('owner', ownerInput);
+                localStorage.setItem('script', scriptInput);
+                localStorage.setItem('type', scriptTypePicker);
+                localStorage.setItem('gameName', gameNameInput);
+
+                // Redirect to the script details page
+                window.location.href = 'script-details.html';
+            };
+            scriptList.appendChild(scriptItem);
+
+            // Clear the input fields
+            document.getElementById('titleInput').value = '';
+            document.getElementById('ownerInput').value = '';
+            document.getElementById('scriptInput').value = '';
+            document.getElementById('scriptTypePicker').value = 'none';
+            document.getElementById('gameNameInput').value = '';
+            document.getElementById('gameNameInput').style.display = 'none';
+        }
+
+        function searchScripts() {
+            var input, filter, scriptList, scriptItems, i, txtValue;
+            input = document.getElementById('searchInput');
+            filter = input.value.toLowerCase();
+            scriptList = document.getElementById('scriptList');
+            scriptItems = scriptList.getElementsByClassName('script-item');
+
+            for (i = 0; i < scriptItems.length; i++) {
+                txtValue = scriptItems[i].textContent || scriptItems[i].innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    scriptItems[i].style.display = "";
+                } else {
+                    scriptItems[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
